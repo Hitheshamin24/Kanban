@@ -8,13 +8,6 @@ const EMPTY_FORM = {
   duedate: "",
 };
 
-const FIELD_LABELS = {
-  title: "Title",
-  description: "Description",
-  priority: "Priority",
-  duedate: "Due Date",
-};
-
 const validate = (form) => {
   const errors = {};
   if (!form.title.trim()) errors.title = "Title is required.";
@@ -32,6 +25,13 @@ const validate = (form) => {
 
   return errors;
 };
+
+const inputBase =
+  "w-full rounded-md border px-3.5 py-2.5 text-sm text-gray-800 placeholder-gray-400 outline-none transition-colors duration-150 focus:ring-2";
+const inputNormal =
+  "border-gray-300 bg-white focus:border-indigo-500 focus:ring-indigo-100";
+const inputError =
+  "border-red-400 bg-red-50 focus:border-red-500 focus:ring-red-100";
 
 const TaskModal = ({ isOpen, onClose, onSubmit, editTask }) => {
   const [form, setForm] = useState(EMPTY_FORM);
@@ -59,9 +59,7 @@ const TaskModal = ({ isOpen, onClose, onSubmit, editTask }) => {
     const { name, value } = e.target;
     const updated = { ...form, [name]: value };
     setForm(updated);
-    if (touched[name]) {
-      setErrors(validate(updated));
-    }
+    if (touched[name]) setErrors(validate(updated));
   };
 
   const handleBlur = (e) => {
@@ -85,48 +83,38 @@ const TaskModal = ({ isOpen, onClose, onSubmit, editTask }) => {
     }
   };
 
-  const inputBase =
-    "w-full rounded-xl border px-3.5 py-2.5 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all duration-150 focus:ring-2";
-  const inputNormal =
-    "border-gray-200 bg-gray-50 focus:border-indigo-400 focus:ring-indigo-100 focus:bg-white";
-  const inputError =
-    "border-red-300 bg-red-50 focus:border-red-400 focus:ring-red-100";
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0" onClick={onClose} />
 
-      {/* Modal */}
-      <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      {/* Modal panel */}
+      <div className="relative w-full max-w-md bg-white rounded-lg border border-gray-200 shadow-xl flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-gray-50">
           <div>
-            <h2 className="text-base font-bold text-gray-900">
+            <h2 className="text-sm font-bold text-gray-900">
               {editTask ? "Edit Task" : "Add New Task"}
             </h2>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <p className="text-xs text-gray-500 mt-0.5">
               {editTask
-                ? "Update the task details below"
+                ? "Update the details below and save"
                 : "Fill in the details to create a new task"}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            className="cursor-pointer p-1.5 rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-200 transition-colors"
           >
-            <X size={18} />
+            <X size={16} />
           </button>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} noValidate className="px-6 py-5 flex flex-col gap-4">
+        {/* Body */}
+        <form onSubmit={handleSubmit} noValidate className="px-5 py-5 flex flex-col gap-4">
           {/* Title */}
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-semibold text-gray-600">
               Title <span className="text-red-500">*</span>
             </label>
             <input
@@ -139,15 +127,15 @@ const TaskModal = ({ isOpen, onClose, onSubmit, editTask }) => {
               className={`${inputBase} ${errors.title && touched.title ? inputError : inputNormal}`}
             />
             {errors.title && touched.title && (
-              <p className="flex items-center gap-1 text-xs text-red-500 mt-1.5">
+              <p className="flex items-center gap-1 text-xs text-red-500">
                 <AlertCircle size={11} /> {errors.title}
               </p>
             )}
           </div>
 
           {/* Description */}
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-semibold text-gray-600">
               Description <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -160,17 +148,16 @@ const TaskModal = ({ isOpen, onClose, onSubmit, editTask }) => {
               className={`${inputBase} resize-none ${errors.description && touched.description ? inputError : inputNormal}`}
             />
             {errors.description && touched.description && (
-              <p className="flex items-center gap-1 text-xs text-red-500 mt-1.5">
+              <p className="flex items-center gap-1 text-xs text-red-500">
                 <AlertCircle size={11} /> {errors.description}
               </p>
             )}
           </div>
 
-          {/* Priority & Due Date — side by side */}
+          {/* Priority + Due Date */}
           <div className="grid grid-cols-2 gap-3">
-            {/* Priority */}
-            <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-semibold text-gray-600">
                 Priority <span className="text-red-500">*</span>
               </label>
               <select
@@ -178,7 +165,7 @@ const TaskModal = ({ isOpen, onClose, onSubmit, editTask }) => {
                 value={form.priority}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className={`${inputBase} ${errors.priority && touched.priority ? inputError : inputNormal}`}
+                className={`cursor-pointer ${inputBase} ${errors.priority && touched.priority ? inputError : inputNormal}`}
               >
                 <option value="">Select…</option>
                 <option value="high">🔴 High</option>
@@ -186,15 +173,14 @@ const TaskModal = ({ isOpen, onClose, onSubmit, editTask }) => {
                 <option value="low">🟢 Low</option>
               </select>
               {errors.priority && touched.priority && (
-                <p className="flex items-center gap-1 text-xs text-red-500 mt-1.5">
+                <p className="flex items-center gap-1 text-xs text-red-500">
                   <AlertCircle size={11} /> {errors.priority}
                 </p>
               )}
             </div>
 
-            {/* Due Date */}
-            <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-semibold text-gray-600">
                 Due Date <span className="text-red-500">*</span>
               </label>
               <input
@@ -203,28 +189,28 @@ const TaskModal = ({ isOpen, onClose, onSubmit, editTask }) => {
                 value={form.duedate}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                className={`${inputBase} ${errors.duedate && touched.duedate ? inputError : inputNormal}`}
+                className={`cursor-pointer ${inputBase} ${errors.duedate && touched.duedate ? inputError : inputNormal}`}
               />
               {errors.duedate && touched.duedate && (
-                <p className="flex items-center gap-1 text-xs text-red-500 mt-1.5">
+                <p className="flex items-center gap-1 text-xs text-red-500">
                   <AlertCircle size={11} /> {errors.duedate}
                 </p>
               )}
             </div>
           </div>
 
-          {/* Footer Buttons */}
-          <div className="flex gap-3 pt-2">
+          {/* Footer */}
+          <div className="flex gap-3 pt-1">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+              className="cursor-pointer flex-1 px-4 py-2.5 rounded-md border border-gray-300 text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 active:scale-95 transition-all duration-150 shadow-sm shadow-indigo-200"
+              className="cursor-pointer flex-1 px-4 py-2.5 rounded-md bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 active:scale-95 transition-all duration-150"
             >
               {editTask ? "Save Changes" : "Add Task"}
             </button>

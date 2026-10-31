@@ -8,13 +8,13 @@ const PRIORITY_STYLES = {
     label: "High",
   },
   medium: {
-    badge: "bg-yellow-100 text-yellow-700 border border-yellow-200",
-    dot: "bg-yellow-500",
+    badge: "bg-amber-100 text-amber-700 border border-amber-200",
+    dot: "bg-amber-500",
     label: "Medium",
   },
   low: {
-    badge: "bg-green-100 text-green-700 border border-green-200",
-    dot: "bg-green-500",
+    badge: "bg-emerald-100 text-emerald-700 border border-emerald-200",
+    dot: "bg-emerald-500",
     label: "Low",
   },
 };
@@ -28,33 +28,31 @@ const STATUS_NEXT = {
 const TaskCard = ({ task, onEdit, onDelete, onStatusChange }) => {
   const priority = PRIORITY_STYLES[task.priority] || PRIORITY_STYLES.low;
   const nextStatus = STATUS_NEXT[task.status];
-
   const isOverdue =
     task.status !== "done" && new Date(task.duedate) < new Date();
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex flex-col gap-3 hover:shadow-md transition-shadow duration-200 group">
-      {/* Priority Badge */}
+    <div className="bg-white rounded-lg border border-gray-200 p-4 flex flex-col gap-3 hover:border-gray-300 hover:shadow-sm transition-all duration-150">
+      {/* Top row: Priority + Action buttons */}
       <div className="flex items-center justify-between">
         <span
-          className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full ${priority.badge}`}
+          className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md ${priority.badge}`}
         >
           <span className={`w-1.5 h-1.5 rounded-full ${priority.dot}`} />
           {priority.label}
         </span>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+        <div className="flex items-center gap-1">
           <button
             onClick={() => onEdit(task)}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+            className="cursor-pointer p-1.5 rounded-md text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
             title="Edit task"
           >
             <Pencil size={14} />
           </button>
           <button
             onClick={() => onDelete(task.id)}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+            className="cursor-pointer p-1.5 rounded-md text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
             title="Delete task"
           >
             <Trash2 size={14} />
@@ -64,7 +62,7 @@ const TaskCard = ({ task, onEdit, onDelete, onStatusChange }) => {
 
       {/* Title & Description */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-800 leading-snug mb-1">
+        <h3 className="text-sm font-bold text-gray-800 leading-snug mb-1">
           {task.title}
         </h3>
         <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
@@ -72,15 +70,15 @@ const TaskCard = ({ task, onEdit, onDelete, onStatusChange }) => {
         </p>
       </div>
 
-      {/* Footer: Due date + Move Status */}
-      <div className="flex items-center justify-between pt-1 border-t border-gray-50">
+      {/* Footer: Due date + Move button */}
+      <div className="flex items-center justify-between pt-2 border-t border-gray-100">
         <span
           className={`flex items-center gap-1 text-xs font-medium ${
             isOverdue ? "text-red-500" : "text-gray-400"
           }`}
         >
           <CalendarDays size={12} />
-          {isOverdue ? "Overdue · " : ""}
+          {isOverdue && <span>Overdue · </span>}
           {new Date(task.duedate).toLocaleDateString("en-IN", {
             day: "2-digit",
             month: "short",
@@ -90,7 +88,7 @@ const TaskCard = ({ task, onEdit, onDelete, onStatusChange }) => {
         {nextStatus && (
           <button
             onClick={() => onStatusChange(task.id, nextStatus.next)}
-            className="flex items-center gap-1 text-xs font-medium text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 px-2 py-1 rounded-lg transition-colors"
+            className="cursor-pointer flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-200 hover:border-indigo-300 transition-colors"
             title={nextStatus.label}
           >
             {nextStatus.label.replace("Move to ", "")}
