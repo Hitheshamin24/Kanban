@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
+import KanbanBoard from "./features/ui/pages/KanbanBoard";
 
 const App = () => {
-  return (
-    <div>App</div>
-  )
-}
+  return <KanbanBoard />;
+};
 
-export default App
+export default App;
