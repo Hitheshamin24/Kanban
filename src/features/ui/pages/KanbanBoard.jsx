@@ -10,16 +10,35 @@ import useBoardUI from "../../hooks/useBoardUI";
 const COLUMNS = ["todo", "inprogress", "done"];
 
 const KanbanBoard = () => {
-  const { tasks, stats, addTask, editTask, deleteTask, changeStatus, getTaskById } =
-    useTasks();
+  const {
+    tasks,
+    stats,
+    addTask,
+    editTask,
+    deleteTask,
+    changeStatus,
+    getTaskById,
+  } = useTasks();
 
   const {
-    search, setSearch,
-    priorityFilter, setPriorityFilter,
-    statusFilter, setStatusFilter,
-    filteredTasks, hasActiveFilters, totalFiltered, clearFilters,
-    modalOpen, editingTask, openAddModal, openEditModal, closeModal,
-    deleteTargetId, requestDelete, cancelDelete,
+    search,
+    setSearch,
+    priorityFilter,
+    setPriorityFilter,
+    statusFilter,
+    setStatusFilter,
+    filteredTasks,
+    hasActiveFilters,
+    totalFiltered,
+    clearFilters,
+    modalOpen,
+    editingTask,
+    openAddModal,
+    openEditModal,
+    closeModal,
+    deleteTargetId,
+    requestDelete,
+    cancelDelete,
   } = useBoardUI(tasks);
 
   const handleModalSubmit = (form) => {
@@ -40,19 +59,19 @@ const KanbanBoard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-
       {/* Header */}
       <header className="sticky top-0 z-40 bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
-
           {/* Logo */}
           <div className="flex items-center gap-2.5 shrink-0">
-            <div className="w-8 h-8 rounded-md bg-indigo-600 flex items-center justify-center">
-              <LayoutDashboard size={16} className="text-white" />
+            <div className="w-8 h-8 rounded-md flex items-center justify-center">
+              <img className="w-full h-full" src="./logo.png" alt="" />
             </div>
             <div className="leading-tight">
               <h1 className="text-sm font-bold text-gray-900">KanbanBoard</h1>
-              <p className="text-[10px] text-gray-500 hidden sm:block">Project task manager</p>
+              <p className="text-[10px] text-gray-500 hidden sm:block">
+                Project task manager
+              </p>
             </div>
           </div>
 
@@ -83,7 +102,6 @@ const KanbanBoard = () => {
 
       {/* Main */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col gap-5">
-
         {/* Search + Filter */}
         <div className="flex flex-col sm:flex-row gap-3">
           <SearchBar value={search} onChange={setSearch} />
@@ -102,12 +120,38 @@ const KanbanBoard = () => {
               Showing{" "}
               <span className="font-bold text-indigo-600">{totalFiltered}</span>{" "}
               {totalFiltered === 1 ? "result" : "results"}
-              {search && <> for <span className="font-semibold text-gray-800">"{search}"</span></>}
+              {search && (
+                <>
+                  {" "}
+                  for{" "}
+                  <span className="font-semibold text-gray-800">
+                    "{search}"
+                  </span>
+                </>
+              )}
               {priorityFilter !== "all" && (
-                <> · <span className="font-semibold capitalize text-gray-800">{priorityFilter}</span> priority</>
+                <>
+                  {" "}
+                  ·{" "}
+                  <span className="font-semibold capitalize text-gray-800">
+                    {priorityFilter}
+                  </span>{" "}
+                  priority
+                </>
               )}
               {statusFilter !== "all" && (
-                <> · <span className="font-semibold capitalize text-gray-800">{statusFilter === "inprogress" ? "In Progress" : statusFilter === "todo" ? "To Do" : "Done"}</span> status</>
+                <>
+                  {" "}
+                  ·{" "}
+                  <span className="font-semibold capitalize text-gray-800">
+                    {statusFilter === "inprogress"
+                      ? "In Progress"
+                      : statusFilter === "todo"
+                        ? "To Do"
+                        : "Done"}
+                  </span>{" "}
+                  status
+                </>
               )}
             </span>
             <button
@@ -125,9 +169,12 @@ const KanbanBoard = () => {
             <div className="w-14 h-14 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center mb-4">
               <SearchX size={24} className="text-gray-400" />
             </div>
-            <h3 className="text-base font-bold text-gray-800 mb-1">No tasks found</h3>
+            <h3 className="text-base font-bold text-gray-800 mb-1">
+              No tasks found
+            </h3>
             <p className="text-sm text-gray-500 max-w-xs mb-5">
-              No tasks match your search or filter. Try adjusting your keywords or clearing the filters.
+              No tasks match your search or filter. Try adjusting your keywords
+              or clearing the filters.
             </p>
             <button
               onClick={clearFilters}
@@ -170,7 +217,9 @@ const KanbanBoard = () => {
               <div className="w-12 h-12 rounded-full bg-red-100 border border-red-200 flex items-center justify-center">
                 <Trash2 size={20} className="text-red-600" />
               </div>
-              <h3 className="text-base font-bold text-gray-900">Delete this task?</h3>
+              <h3 className="text-base font-bold text-gray-900">
+                Delete this task?
+              </h3>
               {taskToDelete && (
                 <p className="text-sm font-semibold text-gray-700 bg-gray-100 border border-gray-200 rounded-md px-3 py-1.5">
                   "{taskToDelete.title}"
