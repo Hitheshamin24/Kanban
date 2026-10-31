@@ -1,11 +1,17 @@
-import { useState, useMemo } from "react";
-import useLocalStorage from "./useLocalStorage";
+import { useMemo } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import {
+  addTask as addTaskAction,
+  removeTask as removeTaskAction,
+  updateTask as updateTaskAction,
+} from "../state/taskSlice";
 
 const generateId = () =>
   `task-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 
 const useTasks = () => {
-  const [tasks, setTasks] = useLocalStorage("kanban-tasks", []);
+  const dispatch = useAppDispatch();
+  const tasks = useAppSelector((state) => state.tasks.tasks);
 
   // task counts per column
   const stats = useMemo(
@@ -19,21 +25,19 @@ const useTasks = () => {
   );
 
   const addTask = (form) => {
-    setTasks((prev) => [...prev, { id: generateId(), ...form, status: "todo" }]);
+    dispatch(addTaskAction({ id: generateId(), ...form, status: "todo" }));
   };
 
   const editTask = (id, form) => {
-    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, ...form } : t)));
+    dispatch(updateTaskAction({ id, ...form }));
   };
 
   const deleteTask = (id) => {
-    setTasks((prev) => prev.filter((t) => t.id !== id));
+    dispatch(removeTaskAction(id));
   };
 
   const changeStatus = (id, newStatus) => {
-    setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, status: newStatus } : t))
-    );
+    dispatch(updateTaskAction({ id, status: newStatus }));
   };
 
   const getTaskById = (id) => tasks.find((t) => t.id === id) ?? null;

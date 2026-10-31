@@ -6,3 +6,13 @@ export const store = configureStore({
     tasks: taskReducer,
   },
 });
+
+// sync redux state changes to localStorage
+store.subscribe(() => {
+  try {
+    const state = store.getState();
+    localStorage.setItem("kanban-tasks", JSON.stringify(state.tasks.tasks));
+  } catch (err) {
+    console.warn("Failed to save tasks to localStorage:", err);
+  }
+});
