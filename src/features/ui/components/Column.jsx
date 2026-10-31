@@ -28,7 +28,7 @@ const Column = ({ status, tasks, onEdit, onDelete, onStatusChange }) => {
 
   return (
     <div
-      className={`bg-gray-50 rounded-lg border border-gray-200 border-t-4 ${meta.accent} flex flex-col min-h-[480px]`}
+      className={`bg-gray-50 rounded-lg border border-gray-200 border-t-4 ${meta.accent} flex flex-col min-h-120`}
     >
       {/* Column Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white rounded-tr-lg">

@@ -1,10 +1,6 @@
 import { useState, useEffect } from "react";
 
-/**
- * Works exactly like useState but persists the value in localStorage.
- * @param {string} key      - localStorage key
- * @param {*}     initial   - default value when nothing is stored yet
- */
+// useState that persists value in localStorage
 const useLocalStorage = (key, initial) => {
   const [value, setValue] = useState(() => {
     try {
