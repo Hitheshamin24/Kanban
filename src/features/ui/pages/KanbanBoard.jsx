@@ -16,6 +16,7 @@ const KanbanBoard = () => {
   const {
     search, setSearch,
     priorityFilter, setPriorityFilter,
+    statusFilter, setStatusFilter,
     filteredTasks, hasActiveFilters, totalFiltered, clearFilters,
     modalOpen, editingTask, openAddModal, openEditModal, closeModal,
     deleteTargetId, requestDelete, cancelDelete,
@@ -86,7 +87,12 @@ const KanbanBoard = () => {
         {/* Search + Filter */}
         <div className="flex flex-col sm:flex-row gap-3">
           <SearchBar value={search} onChange={setSearch} />
-          <FilterBar value={priorityFilter} onChange={setPriorityFilter} />
+          <FilterBar
+            priority={priorityFilter}
+            onPriorityChange={setPriorityFilter}
+            status={statusFilter}
+            onStatusChange={setStatusFilter}
+          />
         </div>
 
         {/* Active filter banner */}
@@ -99,6 +105,9 @@ const KanbanBoard = () => {
               {search && <> for <span className="font-semibold text-gray-800">"{search}"</span></>}
               {priorityFilter !== "all" && (
                 <> · <span className="font-semibold capitalize text-gray-800">{priorityFilter}</span> priority</>
+              )}
+              {statusFilter !== "all" && (
+                <> · <span className="font-semibold capitalize text-gray-800">{statusFilter === "inprogress" ? "In Progress" : statusFilter === "todo" ? "To Do" : "Done"}</span> status</>
               )}
             </span>
             <button

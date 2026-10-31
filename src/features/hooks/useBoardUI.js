@@ -4,6 +4,7 @@ const useBoardUI = (tasks) => {
   // filter state
   const [search, setSearch] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
 
   // modal state
   const [modalOpen, setModalOpen] = useState(false);
@@ -20,16 +21,20 @@ const useBoardUI = (tasks) => {
         t.description.toLowerCase().includes(search.toLowerCase());
       const matchesPriority =
         priorityFilter === "all" || t.priority === priorityFilter;
-      return matchesSearch && matchesPriority;
+      const matchesStatus =
+        statusFilter === "all" || t.status === statusFilter;
+      return matchesSearch && matchesPriority && matchesStatus;
     });
-  }, [tasks, search, priorityFilter]);
+  }, [tasks, search, priorityFilter, statusFilter]);
 
-  const hasActiveFilters = search !== "" || priorityFilter !== "all";
+  const hasActiveFilters =
+    search !== "" || priorityFilter !== "all" || statusFilter !== "all";
   const totalFiltered = filteredTasks.length;
 
   const clearFilters = () => {
     setSearch("");
     setPriorityFilter("all");
+    setStatusFilter("all");
   };
 
   const openAddModal = () => {
@@ -53,6 +58,7 @@ const useBoardUI = (tasks) => {
   return {
     search, setSearch,
     priorityFilter, setPriorityFilter,
+    statusFilter, setStatusFilter,
     filteredTasks, hasActiveFilters, totalFiltered, clearFilters,
     modalOpen, editingTask, openAddModal, openEditModal, closeModal,
     deleteTargetId, requestDelete, cancelDelete,

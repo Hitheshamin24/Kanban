@@ -1,5 +1,5 @@
 import React from "react";
-import { CalendarDays, ChevronRight, Pencil, Trash2 } from "lucide-react";
+import { CalendarDays, ChevronLeft, ChevronRight, Pencil, Trash2 } from "lucide-react";
 
 const PRIORITY_STYLES = {
   high: {
@@ -19,21 +19,14 @@ const PRIORITY_STYLES = {
   },
 };
 
-const STATUS_NEXT = {
-  todo: { label: "Move to In Progress", next: "inprogress" },
-  inprogress: { label: "Move to Done", next: "done" },
-  done: null,
-};
-
 const TaskCard = ({ task, onEdit, onDelete, onStatusChange }) => {
   const priority = PRIORITY_STYLES[task.priority] || PRIORITY_STYLES.low;
-  const nextStatus = STATUS_NEXT[task.status];
   const isOverdue =
     task.status !== "done" && new Date(task.duedate) < new Date();
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 flex flex-col gap-3 hover:border-gray-300 hover:shadow-sm transition-all duration-150">
-      {/* Top row: Priority + Action buttons */}
+      {/* Top row: Priority badge + Action buttons */}
       <div className="flex items-center justify-between">
         <span
           className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md ${priority.badge}`}
@@ -70,8 +63,8 @@ const TaskCard = ({ task, onEdit, onDelete, onStatusChange }) => {
         </p>
       </div>
 
-      {/* Footer: Due date + Move button */}
-      <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+      {/* Due date */}
+      <div className="pt-2 border-t border-gray-100 flex items-center justify-between gap-2 flex-wrap">
         <span
           className={`flex items-center gap-1 text-xs font-medium ${
             isOverdue ? "text-red-500" : "text-gray-400"
@@ -85,16 +78,52 @@ const TaskCard = ({ task, onEdit, onDelete, onStatusChange }) => {
           })}
         </span>
 
-        {nextStatus && (
-          <button
-            onClick={() => onStatusChange(task.id, nextStatus.next)}
-            className="cursor-pointer flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-200 hover:border-indigo-300 transition-colors"
-            title={nextStatus.label}
-          >
-            {nextStatus.label.replace("Move to ", "")}
-            <ChevronRight size={12} />
-          </button>
-        )}
+        {/* Status navigation buttons */}
+        <div className="flex items-center gap-1">
+          {task.status === "inprogress" && (
+            <button
+              onClick={() => onStatusChange(task.id, "todo")}
+              className="cursor-pointer flex items-center gap-0.5 text-xs font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-100 px-2 py-1 rounded-md border border-gray-200 transition-colors"
+              title="Move back to To Do"
+            >
+              <ChevronLeft size={12} />
+              To Do
+            </button>
+          )}
+
+          {task.status === "done" && (
+            <button
+              onClick={() => onStatusChange(task.id, "inprogress")}
+              className="cursor-pointer flex items-center gap-0.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 px-2 py-1 rounded-md border border-indigo-200 transition-colors"
+              title="Move back to In Progress"
+            >
+              <ChevronLeft size={12} />
+              In Progress
+            </button>
+          )}
+
+          {task.status === "todo" && (
+            <button
+              onClick={() => onStatusChange(task.id, "inprogress")}
+              className="cursor-pointer flex items-center gap-0.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 px-2 py-1 rounded-md border border-indigo-200 hover:border-indigo-300 transition-colors"
+              title="Move to In Progress"
+            >
+              In Progress
+              <ChevronRight size={12} />
+            </button>
+          )}
+
+          {task.status === "inprogress" && (
+            <button
+              onClick={() => onStatusChange(task.id, "done")}
+              className="cursor-pointer flex items-center gap-0.5 text-xs font-semibold text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50 px-2 py-1 rounded-md border border-emerald-200 hover:border-emerald-300 transition-colors"
+              title="Move to Done"
+            >
+              Done
+              <ChevronRight size={12} />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
