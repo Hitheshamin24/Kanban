@@ -1,17 +1,18 @@
 import React, { useState, useMemo } from "react";
 import { Plus, LayoutDashboard, SearchX, Trash2 } from "lucide-react";
-import { DUMMY_TASKS } from "../../state/dummyData";
 import Column from "../components/Column";
 import TaskModal from "../components/TaskModal";
 import SearchBar from "../components/SearchBar";
 import FilterBar from "../components/FilterBar";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 const COLUMNS = ["todo", "inprogress", "done"];
 
-let idCounter = DUMMY_TASKS.length + 1;
+// Generate a simple unique id
+const generateId = () => `task-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 
 const KanbanBoard = () => {
-  const [tasks, setTasks] = useState(DUMMY_TASKS);
+  const [tasks, setTasks] = useLocalStorage("kanban-tasks", []);
   const [search, setSearch] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [modalOpen, setModalOpen] = useState(false);
@@ -47,7 +48,7 @@ const KanbanBoard = () => {
   const handleAddTask = (form) => {
     setTasks((prev) => [
       ...prev,
-      { id: String(idCounter++), ...form, status: "todo" },
+      { id: generateId(), ...form, status: "todo" },
     ]);
   };
 

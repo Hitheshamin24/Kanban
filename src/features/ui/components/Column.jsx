@@ -46,7 +46,7 @@ const Column = ({ status, tasks, onEdit, onDelete, onStatusChange }) => {
           <div className="flex-1 flex flex-col items-center justify-center py-12 text-center">
             <ClipboardList size={30} className="text-gray-300 mb-3" />
             <p className="text-sm font-semibold text-gray-400">No tasks here</p>
-            <p className="text-xs text-gray-300 mt-1 max-w-[160px]">{meta.emptyMsg}</p>
+            <p className="text-xs text-gray-300 mt-1 max-w-40">{meta.emptyMsg}</p>
           </div>
         ) : (
           tasks.map((task) => (

@@ -3,9 +3,9 @@ import { Filter } from "lucide-react";
 
 const PRIORITIES = [
   { value: "all", label: "All Priorities" },
-  { value: "high", label: "🔴 High" },
-  { value: "medium", label: "🟡 Medium" },
-  { value: "low", label: "🟢 Low" },
+  { value: "high", label: "High" },
+  { value: "medium", label: "Medium" },
+  { value: "low", label: "Low" },
 ];
 
 const FilterBar = ({ value, onChange }) => {
